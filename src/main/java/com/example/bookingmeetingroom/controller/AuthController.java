@@ -1,9 +1,9 @@
 package com.example.bookingmeetingroom.controller;
 
 import com.example.bookingmeetingroom.model.dto.ChangePasswordFormDTO;
+import com.example.bookingmeetingroom.model.dto.GoogleLoginFormDTO;
 import com.example.bookingmeetingroom.model.dto.LoginFormDTO;
 import com.example.bookingmeetingroom.model.dto.RegistrationFormDTO;
-import com.example.bookingmeetingroom.model.entity.User;
 import com.example.bookingmeetingroom.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +28,9 @@ public class AuthController {
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ChangePasswordFormDTO changePasswordFormDTO){
         return authService.changePassword(changePasswordFormDTO);
+    }
+    @PostMapping("/google")
+    public ResponseEntity<?> googleLogin(@RequestBody GoogleLoginFormDTO googleLoginForm){
+        return null;
     }
 }

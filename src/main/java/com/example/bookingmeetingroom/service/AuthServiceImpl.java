@@ -5,6 +5,7 @@ import com.example.bookingmeetingroom.dao.UserDAO;
 import com.example.bookingmeetingroom.exception.UserAlreadyExistException;
 import com.example.bookingmeetingroom.model.CustomUserDetails;
 import com.example.bookingmeetingroom.model.dto.ChangePasswordFormDTO;
+import com.example.bookingmeetingroom.model.dto.GoogleLoginFormDTO;
 import com.example.bookingmeetingroom.model.dto.LoginFormDTO;
 import com.example.bookingmeetingroom.model.dto.RegistrationFormDTO;
 import com.example.bookingmeetingroom.model.entity.User;
@@ -93,5 +94,10 @@ public class AuthServiceImpl implements AuthService{
         user.setPassword(passwordEncoder.encode(changePasswordFormDTO.getNewPassword()));
         userDAO.save(user);
         return ResponseEntity.ok("Mật khẩu được đặt lại thành công");
+    }
+
+    @Override
+    public void loginWithGoogle(GoogleLoginFormDTO googleLoginFormDTO) {
+
     }
 }
