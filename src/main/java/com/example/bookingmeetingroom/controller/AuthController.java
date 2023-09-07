@@ -29,8 +29,4 @@ public class AuthController {
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ChangePasswordFormDTO changePasswordFormDTO){
         return authService.changePassword(changePasswordFormDTO);
     }
-    @PostMapping("/google")
-    public ResponseEntity<?> googleLogin(@RequestBody GoogleLoginFormDTO googleLoginForm){
-        return null;
-    }
 }

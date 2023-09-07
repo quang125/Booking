@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public ResponseEntity<?> login(LoginFormDTO loginFormDTO) {
         try{
-            return AuthenticateUser(loginFormDTO.getUsername(), loginFormDTO.getPassword());
+            return authenticateUser(loginFormDTO.getUsername(), loginFormDTO.getPassword());
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sai email hoặc mật khẩu!");
@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @NotNull
-    private ResponseEntity<?> AuthenticateUser(String username, String password) {
+    private ResponseEntity<?> authenticateUser(String username, String password) {
         Authentication authentication = authenticationManager.authenticate(new
                 UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService{
                 user.setUsername(registrationFormDTO.getUsername());
                 user.setRole("ROLE_USER");
                 userDAO.save(user);
-                return AuthenticateUser(registrationFormDTO.getUsername(), registrationFormDTO.getPassword());
+                return authenticateUser(registrationFormDTO.getUsername(), registrationFormDTO.getPassword());
             }
             throw new UserAlreadyExistException("Đã tồn tại người dùng, vui lòng chọn tên đăng nhập hoặc email khác");
         }
