@@ -9,9 +9,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class ReportDTO {
-    private int numberOfMeeting;
-    private int numberOfCancel;
-    private Date totalTimeUsed;
+    private int numberOrganized;
+    private int numberCanceled;
 }

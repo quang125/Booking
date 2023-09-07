@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MailController {
     @Autowired
     private MailService mailService;
-    @GetMapping("/send-reset-password-token")
+    @GetMapping("/reset-password")
     public ResponseEntity<String>sendResetPasswordToken(){
         mailService.sendResetPasswordToken();
         return ResponseEntity.ok("Mã đặt lại mật khẩu đã được gửi về mail của bạn");

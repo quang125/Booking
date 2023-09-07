@@ -46,12 +46,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/auth/login","/api/auth/register").permitAll() // Cho phép tất cả mọi người truy cập vào địa chỉ này
-                .antMatchers("/api/auth/test/user").hasRole("USER")
-                .antMatchers("/api/auth/test/admin").hasRole("ADMIN")
-                .anyRequest().authenticated().and().oauth2Login(); // Tất cả các request khác đều cần phải xác thực mới được truy cập
+                .antMatchers("/api/auth/login","/api/auth/register").permitAll()
+                .antMatchers("/api/meetings/booking", "/api/meetings/show").hasRole("USER")
+                .antMatchers("/api/rooms/add","/api/rooms/delete/**","/api/rooms/change","/api/rooms/report").hasRole("ADMIN")
+                .anyRequest().authenticated();
 
-        // Thêm một lớp Filter kiểm tra jwt
+        // Filter kiểm tra jwt
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

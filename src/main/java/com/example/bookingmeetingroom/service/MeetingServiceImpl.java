@@ -15,6 +15,11 @@ import com.example.bookingmeetingroom.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +33,7 @@ public class MeetingServiceImpl implements MeetingService{
     @Autowired
     private RoomDAO roomDAO;
     @Override
-    public boolean cancalMeeting(Long meetingId) throws MeetingNotFoundException, MeetingAlreadyPassedException {
+    public boolean cancelMeeting(Long meetingId) throws MeetingNotFoundException, MeetingAlreadyPassedException, ParseException {
         Optional<Meeting> optionalMeeting=meetingDAO.findById(meetingId);
         if(!optionalMeeting.isPresent()) throw new MeetingNotFoundException();
         Meeting meeting=optionalMeeting.get();
@@ -39,6 +44,7 @@ public class MeetingServiceImpl implements MeetingService{
         if(meeting.getStartTime().after(new Date())){
             meeting.setStatus("canceled");
             meetingDAO.save(meeting);
+            return true;
         }
         throw new MeetingAlreadyPassedException();
     }
@@ -49,6 +55,7 @@ public class MeetingServiceImpl implements MeetingService{
         List<Meeting>meetingList=meetingDAO.findByUserId(user.getId());
         List<MeetingDTO>meetingDTOList=new ArrayList<>();
         for(Meeting meeting:meetingList){
+            if(meeting.getRoom().isDeleted()) continue;
             meetingDTOList.add(new MeetingDTO(meeting.getStartTime(),meeting.getEndTime(),meeting.getRoom().getRoomName(),
                     meeting.getUser().getName()));
         }
@@ -57,10 +64,11 @@ public class MeetingServiceImpl implements MeetingService{
 
     @Override
     public MeetingDTO bookMeeting(BookingDTO bookingDTO) throws RoomNotFoundException, RoomAlreadyUsedException {
-        if(bookingDTO.getEndTime().before(bookingDTO.getStartTime())) return null;
+        if(bookingDTO.getEndTime().before(bookingDTO.getStartTime())||bookingDTO.getStartTime().before(new Date())) return null;
         Optional<Room> optionalRoom=roomDAO.findByRoomName(bookingDTO.getRoomName());
         if(!optionalRoom.isPresent()||optionalRoom.get().isDeleted()) throw new RoomNotFoundException(bookingDTO.getRoomName());
         Room room=optionalRoom.get();
+        if(bookingDTO.getNumberAttend()>room.getCapacity()) return null;
         List<Meeting>meetingList=meetingDAO.findByRoomId(room.getId());
         for(Meeting meeting: meetingList){
             if(meeting.getStatus().equals("canceled")) continue;
@@ -69,7 +77,8 @@ public class MeetingServiceImpl implements MeetingService{
                     ||(bookingDTO.getStartTime().before(meeting.getStartTime())&&bookingDTO.getEndTime().after(meeting.getEndTime())))
                 throw new RoomAlreadyUsedException(meeting.getRoom().getRoomName());
         }
-        Meeting newMeeting=new Meeting(bookingDTO.getProjectName(), "scheduled", bookingDTO.getStartTime(), bookingDTO.getEndTime(),
+        System.out.println(bookingDTO.getNumberAttend());
+        Meeting newMeeting=new Meeting(bookingDTO.getProjectName(), "scheduled", bookingDTO.getStartTime(), bookingDTO.getEndTime(), bookingDTO.getNumberAttend(),
                 authService.getCurrentLoggedInUser(),room);
         meetingDAO.save(newMeeting);
         return new MeetingDTO(bookingDTO.getStartTime(), bookingDTO.getEndTime(), room.getRoomName(), authService.getCurrentLoggedInUser().getName());
@@ -90,7 +99,7 @@ public class MeetingServiceImpl implements MeetingService{
                 throw new RoomAlreadyUsedException(meeting.getRoom().getRoomName());
         }
         Meeting newMeeting=new Meeting(oldMeeting.getId(),oldMeeting.getProjectName(), "scheduled", oldMeeting.getStartTime(),
-                oldMeeting.getEndTime(),oldMeeting.getUser(),room);
+                oldMeeting.getEndTime(), oldMeeting.getNumberAttend(), oldMeeting.getUser(),room);
         meetingDAO.save(newMeeting);
         return new MeetingDTO(oldMeeting.getStartTime(), oldMeeting.getEndTime(), room.getRoomName(), oldMeeting.getUser().getName());
     }

@@ -36,21 +36,14 @@ public class Meeting {
     @JoinColumn(name="room_id")
     private Room room;
 
-    public Meeting(String projectName, String status, Date startTime, Date endTime, User currentLoggedInUser, Room room) {
+    public Meeting(String projectName, String status, Date startTime, Date endTime, int numberAttend, User currentLoggedInUser, Room room) {
         this.projectName=projectName;
         this.status=status;
         this.startTime=startTime;
         this.endTime=endTime;
+        this.numberAttend=numberAttend;
         this.user=currentLoggedInUser;
         this.room=room;
     }
-    public Meeting(Long id, String projectName, String status, Date startTime, Date endTime, User currentLoggedInUser, Room room) {
-        this.id=id;
-        this.projectName=projectName;
-        this.status=status;
-        this.startTime=startTime;
-        this.endTime=endTime;
-        this.user=currentLoggedInUser;
-        this.room=room;
-    }
+
 }

@@ -2,6 +2,7 @@ package com.example.bookingmeetingroom.service;
 
 import com.example.bookingmeetingroom.dao.MeetingDAO;
 import com.example.bookingmeetingroom.dao.RoomDAO;
+import com.example.bookingmeetingroom.exception.RoomAlreadyUsedException;
 import com.example.bookingmeetingroom.exception.RoomNotFoundException;
 import com.example.bookingmeetingroom.model.dto.ChangeRoomInformationDTO;
 import com.example.bookingmeetingroom.model.dto.MeetingScheduleDTO;
@@ -25,7 +26,7 @@ public class RoomServiceImpl implements RoomService{
         List<Meeting>meetingList=meetingDAO.findAll();
         List<MeetingScheduleDTO>meetingScheduleDTOList=new ArrayList<>();
         for(Meeting meeting:meetingList){
-            if(meeting.getRoom().isDeleted()) continue;
+            if(meeting.getRoom().isDeleted()||meeting.getStatus().equals("canceled")) continue;
             meetingScheduleDTOList.add(new MeetingScheduleDTO(meeting.getRoom().getRoomName(), meeting.getStartTime(),
                     meeting.getEndTime(), meeting.getUser().getName()));
         }
@@ -33,10 +34,10 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public RoomFormDTO addRoom(RoomFormDTO roomFormDTO) throws RoomNotFoundException {
+    public RoomFormDTO addRoom(RoomFormDTO roomFormDTO) throws RoomAlreadyUsedException {
         Optional<Room>optionalRoom=roomDAO.findByRoomName(roomFormDTO.getRoomName());
         if(optionalRoom.isPresent()){
-            if(!optionalRoom.get().isDeleted()) throw new RoomNotFoundException(roomFormDTO.getRoomName());
+            if(!optionalRoom.get().isDeleted()) throw new RoomAlreadyUsedException(roomFormDTO.getRoomName());
             else{
                 Room oldRoom=optionalRoom.get();
                 oldRoom.setDeleted(false);
@@ -68,18 +69,28 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public HashMap<String,List<ReportDTO>> MonthlyRoomUsageReport() {
+    public Map<String,ReportDTO> MonthlyRoomUsageReport() {
         List<Meeting>meetingList=meetingDAO.findAll();
-        HashMap<String,List<ReportDTO>>reportDTO=new HashMap<>();
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
         calendar.add(Calendar.DAY_OF_MONTH, -30);
         Date date30DaysAgo = calendar.getTime();
+        Map<String,ReportDTO>reportDTOMap=new HashMap<>();
         for(Meeting meeting:meetingList){
             if(meeting.getEndTime().before(new Date())&&meeting.getEndTime().after(date30DaysAgo)){
-                if(!reportDTO.containsKey(meeting.getRoom().getRoomName())) reportDTO.put(meeting.getRoom().getRoomName(),new ArrayList<>());
-                reportDTO.get(meeting.getRoom().getRoomName()).add(new ReportDTO())
+                if(!reportDTOMap.containsKey(meeting.getRoom().getRoomName())){
+                    reportDTOMap.put(meeting.getRoom().getRoomName(),new ReportDTO(0,0));
+                }
+                if(meeting.getStatus().equals("canceled")){
+                    reportDTOMap.get(meeting.getRoom().getRoomName()).setNumberCanceled(
+                            1+reportDTOMap.get(meeting.getRoom().getRoomName()).getNumberCanceled());
+                }
+                else{
+                    reportDTOMap.get(meeting.getRoom().getRoomName()).setNumberOrganized(
+                            1+reportDTOMap.get(meeting.getRoom().getRoomName()).getNumberOrganized());
+                }
             }
         }
+        return reportDTOMap;
     }
 }
