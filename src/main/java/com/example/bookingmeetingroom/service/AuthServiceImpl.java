@@ -1,6 +1,6 @@
 package com.example.bookingmeetingroom.service;
 
-import com.example.bookingmeetingroom.Utils.JwtTokenUtil;
+import com.example.bookingmeetingroom.utils.JwtTokenUtil;
 import com.example.bookingmeetingroom.dao.UserDAO;
 import com.example.bookingmeetingroom.exception.UserAlreadyExistException;
 import com.example.bookingmeetingroom.model.CustomUserDetails;
@@ -23,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService{

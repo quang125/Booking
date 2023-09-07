@@ -32,6 +32,8 @@ public class MeetingServiceImpl implements MeetingService{
     private AuthService authService;
     @Autowired
     private RoomDAO roomDAO;
+    @Autowired
+    private MailService mailService;
     @Override
     public boolean cancelMeeting(Long meetingId) throws MeetingNotFoundException, MeetingAlreadyPassedException, ParseException {
         Optional<Meeting> optionalMeeting=meetingDAO.findById(meetingId);
@@ -77,10 +79,10 @@ public class MeetingServiceImpl implements MeetingService{
                     ||(bookingDTO.getStartTime().before(meeting.getStartTime())&&bookingDTO.getEndTime().after(meeting.getEndTime())))
                 throw new RoomAlreadyUsedException(meeting.getRoom().getRoomName());
         }
-        System.out.println(bookingDTO.getNumberAttend());
         Meeting newMeeting=new Meeting(bookingDTO.getProjectName(), "scheduled", bookingDTO.getStartTime(), bookingDTO.getEndTime(), bookingDTO.getNumberAttend(),
                 authService.getCurrentLoggedInUser(),room);
         meetingDAO.save(newMeeting);
+        mailService.scheduleEmailSending(authService.getCurrentLoggedInUser().getEmail(),bookingDTO.getStartTime());
         return new MeetingDTO(bookingDTO.getStartTime(), bookingDTO.getEndTime(), room.getRoomName(), authService.getCurrentLoggedInUser().getName());
     }
 

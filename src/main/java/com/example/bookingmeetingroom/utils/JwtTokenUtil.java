@@ -1,4 +1,4 @@
-package com.example.bookingmeetingroom.Utils;
+package com.example.bookingmeetingroom.utils;
 
 import io.jsonwebtoken.*;
 

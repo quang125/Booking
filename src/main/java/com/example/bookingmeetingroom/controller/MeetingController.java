@@ -7,6 +7,7 @@ import com.example.bookingmeetingroom.exception.RoomNotFoundException;
 import com.example.bookingmeetingroom.model.dto.BookingDTO;
 import com.example.bookingmeetingroom.model.dto.ChangeMeetingRoomDTO;
 import com.example.bookingmeetingroom.model.dto.MeetingDTO;
+import com.example.bookingmeetingroom.service.MailService;
 import com.example.bookingmeetingroom.service.MeetingService;
 import org.hibernate.loader.custom.Return;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.util.List;
 public class MeetingController {
     @Autowired
     private MeetingService meetingService;
+
 
     @PostMapping("/booking")
     public ResponseEntity<MeetingDTO>bookingMeetingRoom(@Valid @RequestBody BookingDTO bookingDTO) throws RoomNotFoundException, RoomAlreadyUsedException {

@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FileServiceImpl implements FileService{
@@ -45,6 +46,9 @@ public class FileServiceImpl implements FileService{
                 String name=nextLine[2];
                 String email=nextLine[3];
                 String role="ROLE_USER";
+                Optional<User>user1=userDAO.findByUsername(username);
+                Optional<User>user2=userDAO.findByUsername(email);
+                if(user1.isPresent()||user2.isPresent()) continue;
                 User user = new User(username,password,name,email,role);
                 users.add(user);
             }
