@@ -7,9 +7,7 @@ import com.example.bookingmeetingroom.exception.RoomNotFoundException;
 import com.example.bookingmeetingroom.model.dto.BookingDTO;
 import com.example.bookingmeetingroom.model.dto.ChangeMeetingRoomDTO;
 import com.example.bookingmeetingroom.model.dto.MeetingDTO;
-import com.example.bookingmeetingroom.service.MailService;
 import com.example.bookingmeetingroom.service.MeetingService;
-import org.hibernate.loader.custom.Return;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +33,7 @@ public class MeetingController {
         return ResponseEntity.ok(meetingDTO);
     }
     @PutMapping("/cancel/{meetingId}")
-    public ResponseEntity<String>cancelMeeting(@PathVariable Long meetingId) throws MeetingNotFoundException, MeetingAlreadyPassedException, ParseException {
+    public ResponseEntity<String>cancelMeeting(@PathVariable String meetingId) throws MeetingNotFoundException, MeetingAlreadyPassedException, ParseException {
         boolean canCancel= meetingService.cancelMeeting(meetingId);
         if(canCancel==false) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Can not cancel meeting");
         return ResponseEntity.ok("Meeting canceled");

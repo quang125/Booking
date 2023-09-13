@@ -3,8 +3,8 @@ package com.example.bookingmeetingroom.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.util.Date;
@@ -12,12 +12,10 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Document(collection = "Email")
 public class Email {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    private String id;
     @Past
     private Date timeSend;
     @NotNull
@@ -35,7 +33,5 @@ public class Email {
 
     @NotNull
     private String type;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
     private User user;
 }

@@ -1,6 +1,6 @@
 package com.example.bookingmeetingroom.service;
 
-import com.example.bookingmeetingroom.dao.UserDAO;
+import com.example.bookingmeetingroom.dao.UserMongoDAO;
 import com.example.bookingmeetingroom.model.entity.User;
 import com.opencsv.CSVReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 public class FileServiceImpl implements FileService {
     @Autowired
-    private UserDAO userDAO;
+    private UserMongoDAO userDAO;
     @Autowired
     private PasswordEncoder passwordEncoder;
 

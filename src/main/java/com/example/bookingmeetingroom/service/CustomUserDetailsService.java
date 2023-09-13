@@ -1,6 +1,6 @@
 package com.example.bookingmeetingroom.service;
 
-import com.example.bookingmeetingroom.dao.UserDAO;
+import com.example.bookingmeetingroom.dao.UserMongoDAO;
 import com.example.bookingmeetingroom.model.CustomUserDetails;
 import com.example.bookingmeetingroom.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
-    private UserDAO userDAO;
+    private UserMongoDAO userDAO;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User>optionalUser=userDAO.findByUsername(username);
@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         throw new UsernameNotFoundException(username);
     }
-    public UserDetails loadUserById(Long userId) {
+    public UserDetails loadUserById(String userId) {
         Optional<User>optionalUser=userDAO.findById(userId);
         User user=optionalUser.get();
         if(optionalUser.isPresent()){

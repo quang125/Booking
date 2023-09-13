@@ -32,7 +32,7 @@ public class RoomController {
         return ResponseEntity.ok(roomService.changeRoomInformation(roomFormDTO));
     }
     @PutMapping("/delete/{roomID}")
-    public ResponseEntity<String>deleteRoom(@PathVariable Long roomID) throws RoomNotFoundException {
+    public ResponseEntity<String>deleteRoom(@PathVariable String roomID) throws RoomNotFoundException {
         boolean canDelete= roomService.deleteRoom(roomID);
         if(canDelete==false){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Can not delete this room");

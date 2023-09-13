@@ -4,30 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.util.List;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(collection = "Room")
 public class Room {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    private String id;
     @NotNull
     private int capacity;
-    @Column(unique = true)
     private String roomName;
     private boolean isDeleted;
-    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
-    private List<Meeting> meetingList;
-    public Room(int capacity, String roomName, boolean isDeleted, List<Meeting> meetingList) {
+    public Room(int capacity, String roomName, boolean isDeleted) {
         this.capacity = capacity;
         this.roomName = roomName;
         this.isDeleted = isDeleted;
-        this.meetingList = meetingList;
     }
 }

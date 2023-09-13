@@ -13,7 +13,7 @@ import java.util.Map;
 public interface RoomService {
     public List<MeetingScheduleDTO> getAllRoomMeetingSchedule();
     public RoomFormDTO addRoom(RoomFormDTO roomFormDTO) throws RoomAlreadyUsedException;
-    public boolean deleteRoom(Long roomId) throws RoomNotFoundException;
+    public boolean deleteRoom(String roomId) throws RoomNotFoundException;
     public RoomFormDTO changeRoomInformation(RoomFormDTO roomFormDTO);
     public Map<String,ReportDTO> MonthlyRoomUsageReport();
 }

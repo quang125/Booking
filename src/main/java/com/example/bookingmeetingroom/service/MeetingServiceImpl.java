@@ -37,7 +37,7 @@ public class MeetingServiceImpl implements MeetingService {
     private MailService mailService;
 
     @Override
-    public boolean cancelMeeting(Long meetingId) throws MeetingNotFoundException, MeetingAlreadyPassedException, ParseException {
+    public boolean cancelMeeting(String meetingId) throws MeetingNotFoundException, MeetingAlreadyPassedException, ParseException {
         Optional<Meeting> optionalMeeting = meetingDAO.findById(meetingId);
         if (!optionalMeeting.isPresent()) throw new MeetingNotFoundException();
         Meeting meeting = optionalMeeting.get();

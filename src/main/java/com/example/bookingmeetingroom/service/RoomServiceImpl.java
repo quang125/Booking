@@ -45,13 +45,13 @@ public class RoomServiceImpl implements RoomService{
                 return roomFormDTO;
             }
         }
-        Room room=new Room(roomFormDTO.getCapacity(), roomFormDTO.getRoomName(),  false,new ArrayList<>());
+        Room room=new Room(roomFormDTO.getCapacity(), roomFormDTO.getRoomName(),  false);
         roomDAO.save(room);
         return roomFormDTO;
     }
 
     @Override
-    public boolean deleteRoom(Long roomId){
+    public boolean deleteRoom(String roomId){
         Optional<Room>optionalRoom=roomDAO.findById(roomId);
         if(!optionalRoom.isPresent()||optionalRoom.get().isDeleted()) return false;
         Room room=optionalRoom.get();

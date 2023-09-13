@@ -4,21 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
-@Entity
+@Document(collection = "Meeting")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Meeting {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    private String id;
     @NotNull
     @Size(min = 3, max = 50)
     private String projectName;
@@ -29,11 +27,8 @@ public class Meeting {
     @NotNull
     private int numberAttend;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
     private User user;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="room_id")
+
     private Room room;
 
     public Meeting(String projectName, String status, Date startTime, Date endTime, int numberAttend, User currentLoggedInUser, Room room) {

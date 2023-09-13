@@ -1,7 +1,7 @@
 package com.example.bookingmeetingroom.service;
 
 import com.example.bookingmeetingroom.utils.JwtTokenUtil;
-import com.example.bookingmeetingroom.dao.UserDAO;
+import com.example.bookingmeetingroom.dao.UserMongoDAO;
 import com.example.bookingmeetingroom.exception.UserAlreadyExistException;
 import com.example.bookingmeetingroom.model.CustomUserDetails;
 import com.example.bookingmeetingroom.model.dto.ChangePasswordFormDTO;
@@ -27,7 +27,7 @@ import java.util.Date;
 @Service
 public class AuthServiceImpl implements AuthService{
     @Autowired
-    private UserDAO userDAO;
+    private UserMongoDAO userDAO;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -65,6 +65,7 @@ public class AuthServiceImpl implements AuthService{
                 user.setUsername(registrationFormDTO.getUsername());
                 user.setRole("ROLE_USER");
                 userDAO.save(user);
+                System.err.println("CCCCCCCC");
                 return authenticateUser(registrationFormDTO.getUsername(), registrationFormDTO.getPassword());
             }
             throw new UserAlreadyExistException("Đã tồn tại người dùng, vui lòng chọn tên đăng nhập hoặc email khác");

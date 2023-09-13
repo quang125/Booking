@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChangeMeetingRoomDTO {
-    private Long meetingId;
+    private String meetingId;
     @NotNull
     private String newRoomName;
 }

@@ -12,7 +12,7 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface MeetingService {
-    public boolean cancelMeeting(Long meetingId) throws MeetingNotFoundException, MeetingAlreadyPassedException, ParseException;
+    public boolean cancelMeeting(String meetingId) throws MeetingNotFoundException, MeetingAlreadyPassedException, ParseException;
     public List<MeetingDTO> getAllBookedMeeting();
     public MeetingDTO bookMeeting(BookingDTO bookingDTO) throws RoomNotFoundException, RoomAlreadyUsedException;
     public MeetingDTO changeMeetingRoom(ChangeMeetingRoomDTO changeRoomDTO) throws RoomNotFoundException, RoomAlreadyUsedException;
